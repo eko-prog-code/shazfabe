@@ -28,7 +28,7 @@ app.post('/forward-request', async (req, res) => {
         // Log the curl command to the console
         console.log(`curl -X POST "${apiUrl}" -H "Content-Type: application/json" -H "Authorization: Bearer ${accessToken}" -d '${JSON.stringify(req.body)}'`);
 
-        const fetch = require('node-fetch');
+        const { default: fetch } = await import('node-fetch');
         const apiResponse = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -145,7 +145,6 @@ app.put('/api/user', (req, res) => {
 
   res.json({ success: true, message: 'User data updated successfully' });
 });
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
