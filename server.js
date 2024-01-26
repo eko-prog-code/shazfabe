@@ -18,48 +18,33 @@ app.use(express.json());
 
 app.post('/forward-request', async (req, res) => {
     try {
-      // Ambil token dari Firebase Realtime Database
-      const firebaseTokenUrl = "https://rme-shazfa-mounira-default-rtdb.firebaseio.com/token.json";
-      const response = await axios.get(firebaseTokenUrl);
-      const accessToken = response.data.token; // Sesuaikan dengan struktur data Anda
-  
-      const apiUrl = 'https://api-satusehat-dev.dto.kemkes.go.id/fhir-r4/v1/Encounter';
-  
-      // Log the curl command to the console
-      console.log(`curl -X POST "${apiUrl}" -H "Content-Type: application/json" -H "Authorization: Bearer ${accessToken}" -d '${JSON.stringify(req.body)}'`);
-  
-      const { default: fetch } = await import('node-fetch');
-      const apiResponse = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(req.body),
-      });
-  
-      // Mengonversi respon ke JSON jika diperlukan
-      const responseData = await apiResponse.json();
-  
-      // Simpan hasil respon ke Firebase Realtime Database
-      const dataKey = req.body.key; // Ambil kunci dari data yang diterima
-      const firebaseEndpoint = `https://rme-shazfa-mounira-default-rtdb.firebaseio.com/encounters/${dataKey}.json`;
-  
-      await axios.put(firebaseEndpoint, responseData, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        },
-      });
-  
-      res.json(responseData);
+        // Ambil token dari Firebase Realtime Database
+        const firebaseTokenUrl = "https://rme-shazfa-mounira-default-rtdb.firebaseio.com/token.json";
+        const response = await axios.get(firebaseTokenUrl);
+        const accessToken = response.data.token; // Sesuaikan dengan struktur data Anda
+
+        const apiUrl = 'https://api-satusehat-dev.dto.kemkes.go.id/fhir-r4/v1/Encounter';
+
+        // Log the curl command to the console
+        console.log(`curl -X POST "${apiUrl}" -H "Content-Type: application/json" -H "Authorization: Bearer ${accessToken}" -d '${JSON.stringify(req.body)}'`);
+
+        const { default: fetch } = await import('node-fetch');
+        const apiResponse = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(req.body),
+        });
+
+        const responseData = await apiResponse.json();
+        res.json(responseData);
     } catch (error) {
-      console.error('Error forwarding request:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error forwarding request:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
-  
- 
+});
 
 app.post('/forward-request-condition', async (req, res) => {
     try {
