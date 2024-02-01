@@ -16,6 +16,23 @@ app.use(cors({
 
 app.use(express.json());
 
+// Assuming you have some storage to keep track of payment status, like a database
+let paymentStatus = false;
+
+// Endpoint to simulate updating payment status
+app.post('/update-payment-status', (req, res) => {
+    // Simulate updating payment status to true
+    paymentStatus = true;
+    res.json({ success: true });
+});
+
+// Endpoint to check payment status
+app.get('/payment-status', (req, res) => {
+    // Your logic to check payment status here
+    res.json({ paymentStatus });
+});
+
+
 app.post('/forward-request', async (req, res) => {
     try {
         // Ambil token dari Firebase Realtime Database
