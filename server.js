@@ -16,7 +16,7 @@ app.use(cors({
 
 app.use(express.json());
 
-let paymentStatus = 'paid'; // Nilai awal default
+let paymentStatus = 'unpaid'; // Nilai awal default
 
 app.get('/payment-status', (req, res) => {
   res.json({ paymentStatus });
