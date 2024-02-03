@@ -16,10 +16,21 @@ app.use(cors({
 
 app.use(express.json());
 
-let paymentStatus = "unpaid"; // Default status
+let paymentStatus = 'paid'; // Nilai awal default
 
-app.get("/api/payment-status", (req, res) => {
-  res.json({ status: paymentStatus });
+app.get('/payment-status', (req, res) => {
+  res.json({ paymentStatus });
+});
+
+app.post('/update-payment-status', (req, res) => {
+  const { newStatus } = req.body;
+
+  if (newStatus === 'paid' || newStatus === 'unpaid') {
+    paymentStatus = newStatus;
+    res.json({ success: true, paymentStatus });
+  } else {
+    res.json({ success: false, message: 'Invalid payment status' });
+  }
 });
 
 
